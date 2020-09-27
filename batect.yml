@@ -1,0 +1,52 @@
+---
+project_name: hello-ktor
+
+containers:
+  build-env:
+    image: zenika/kotlin:1.3-alpine
+    volumes:
+      - .:/code:cached
+      - .gradle:/home/container-user/.gradle:cached
+    working_directory: /code
+    environment:
+      HOSTNAME: $HOSTNAME
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/container-user
+
+tasks:
+  shell:
+    description: Container shell
+    run:
+      container: build-env
+      command: sh
+
+  build-service:
+    description: Build service
+    run:
+      container: build-env
+      command: ./gradlew run
+
+  build-image:
+    description: Build service docker image
+    prerequisites:
+      - build
+    run:
+      container: build-env
+      command: ./scripts/build-image.sh
+      environment:
+        SERVER_NAME: ${SERVER_NAME:-BLUE}
+        VERSION: ${VERSION:-1.0}
+
+  run:
+    description: Run service
+    run:
+      container: build-env
+      command: ./gradlew run
+
+  test:
+    description: Run tests
+    run:
+      container: build-env
+      command: ./gradlew test
