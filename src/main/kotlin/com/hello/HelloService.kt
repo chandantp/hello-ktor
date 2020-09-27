@@ -11,11 +11,12 @@ import io.ktor.server.netty.Netty
 
 fun main() {
     val message = System.getenv("SERVER_NAME") ?: "Unknown"
+    val version = System.getenv("SERVER_VERSION") ?: "Unknown"
 
     embeddedServer(Netty, 8080) {
         routing {
             get("/hello") {
-                call.respondText("Hello, I am $message!", ContentType.Text.Html)
+                call.respondText("Hello, I am $message stack, version $version!", ContentType.Text.Html)
             }
         }
     }.start(wait = true)
