@@ -1,23 +1,33 @@
 # Hello Ktor
 A Ktor starter project implementing hello service.
 
-This code has been built and tested on `JDK 1.8.0_181`.
-
-#### Start hello-service using Gradle
-```shell script
-$ ./gradlew run
-```
-
-#### Start hello-service using Jar
-```shell script
-$ ./gradlew clean build    ### First build the jar
-```
-
-```shell script
-$ java -jar build/libs/hello-ktor-1.0-SNAPSHOT.jar
-```
-
 #### Run Tests
 ```shell script
-$ ./gradlew test
+$ ./batect test
+```
+
+#### Build Service
+```shell script
+$ ./batect build-service
+```
+
+#### Run Service
+```shell script
+$ ./batect run
+```
+
+#### Build Dockerised Service Image
+```shell script
+$ SERVER_NAME=BLUE SERVER_VERSION=1.0 ./batect build-image
+```
+
+#### Run Dockerised Service
+```shell script
+$ docker run -p 8080:8080 hello:1.0
+```
+
+#### Send Traffic to Service
+```shell script
+$ curl http://localhost:8080/hello
+Hello, I am BLUE stack, version 1.0!
 ```
